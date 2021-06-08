@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "14794344871",
+    "firebase_url": "https://helpaltest.firebaseio.com",
+    "project_id": "helpaltest",
+    "storage_bucket": "helpaltest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14794344871:android:c185e46563f9a7b99d8e82",
+        "android_client_info": {
+          "package_name": "com.helpal.helpalapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14794344871-cck72n5ljspht0el067g10bm0559lon1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.helpal.helpalapp",
+            "certificate_hash": "e062950421514bdf58f4476138ad81c6392987a9"
+          }
+        },
+        {
+          "client_id": "14794344871-l6t58dvbm0gis2bcr54ak1eglm98rms7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAou-oyuMcEWJXTajH3px-F-bbkmRHaKmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14794344871-l6t58dvbm0gis2bcr54ak1eglm98rms7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
