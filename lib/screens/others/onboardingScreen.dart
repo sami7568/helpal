@@ -42,6 +42,7 @@ class _OnBoardingState extends State<OnBoarding> {
       scale: 1.5,
     )
   };
+
   @override
   void initState() {
     super.initState();

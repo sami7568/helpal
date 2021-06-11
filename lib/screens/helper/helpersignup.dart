@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/functions/storagehandler.dart';
+import 'package:helpalapp/screens/helpee/helpeephonsignin.dart';
 import 'package:helpalapp/screens/helper/helperotpscreen.dart';
 import 'package:helpalapp/screens/helper/helpersignin.dart';
 import 'package:helpalapp/screens/helper/helpersignupdetails.dart';
@@ -134,9 +135,9 @@ class _HelperSignupState extends State<HelperSignup> {
 
   void verifyPhone() async {
     if (_field.startsWith("Select")) {
+      print("VerifyPHone :: select");
       DialogsHelpal.showMsgBox("Error", "Please select your field",
           AlertType.error, myContext, Appdetails.appGreenColor);
-
       return;
     }
     if (_image == null) {
@@ -146,6 +147,8 @@ class _HelperSignupState extends State<HelperSignup> {
       return;
     }
     print("Verifying:$formatedPhone()");
+    print("going to verify");
+
     _auth.loginUserWithPhone(formatedPhone(), myContext,
         phoneAutoVerifiedCallback, showotpscreenCallback);
   }

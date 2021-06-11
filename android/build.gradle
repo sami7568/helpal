@@ -5,10 +5,13 @@ buildscript {
         jcenter()
     }
 
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.4'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.1.1'
+
 
     }
 }
@@ -27,6 +30,7 @@ subprojects {
 subprojects {
     project.evaluationDependsOn(':app')
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

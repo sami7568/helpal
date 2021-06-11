@@ -47,7 +47,7 @@ void main() async {
     Appdetails.isFirstTime =
         HelpalStreams.prefs.getString(Appdetails.firstTimeKey);
     //getting output in editor console
-    print("Running App First Time = " + isFirstTime);
+    print("Running App First Time =   $isFirstTime");
   }
 }
 
@@ -167,7 +167,7 @@ class Authenticate extends StatelessWidget {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      print(firebaseUser.phoneNumber + " this is user which is not null");
+      print("$firebaseUser.phoneNumber this is user which is not null");
       return SplashScreen();
     }
     if (showSplash) {

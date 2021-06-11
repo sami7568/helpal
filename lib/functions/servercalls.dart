@@ -115,6 +115,7 @@ class AuthService {
       Navigator.pop(context);
       //getting user from result
       User user = result.user;
+      print("user $user");
       //checking if user is not null
       if (user != null) {
         //saving user in static variable
@@ -143,7 +144,8 @@ class AuthService {
   ///Login user with phone authentication
   ///////////////////////////////////////////
   void loginUserWithPhone(String phone, BuildContext context,
-      Function autoVerfyCallback, Function otpScreenCallback) async {
+
+    Function autoVerfyCallback, Function otpScreenCallback) async {
     print("Received call for $phone");
     //Creating a formated phone variable
     String formatedPhone = phone.trim().replaceAll(" ", "");
@@ -161,7 +163,7 @@ class AuthService {
       //given phone number
       phoneNumber: formatedPhone,
       //timeout for auto verification or code seding
-      timeout: Duration(seconds: 30),
+      timeout: Duration(seconds: 90),
       //if verified automatically
       verificationCompleted: (AuthCredential credential) async {
         //creating credentional variable
@@ -170,7 +172,7 @@ class AuthService {
         Navigator.pop(context);
         //getting user from credentions
         User user = result.user;
-
+        print("Authenticating USer phone number ::  $user ");
         //checking if user is not null so proceed to dashboard
         if (user != null) {
           //saving current user variable as static
@@ -250,7 +252,7 @@ class AuthService {
   //////////////////////////////////////////
   //Signin User with Facebook
   //////////////////////////////////////////
-  /* Future<UserCredential> signInWithFacebook() async {
+   /*Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
     final LoginResult result = await FacebookAuth.instance.login();
 
@@ -260,7 +262,7 @@ class AuthService {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  } */
+  }*/
   //////////////////////////////////////////
   //Signout user
   //////////////////////////////////////////

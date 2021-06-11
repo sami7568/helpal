@@ -8,6 +8,7 @@ import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/screens/helpee/helpeedashboard.dart';
 import 'package:helpalapp/screens/helpee/helpeesignup.dart';
 import 'package:helpalapp/screens/helper/helperdashboard.dart';
+import 'package:helpalapp/screens/helper/helpersignin.dart';
 import 'package:helpalapp/screens/helper/helpersignup.dart';
 import 'package:helpalapp/screens/helper/helpersignupdetails.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
@@ -189,7 +190,8 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
               fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
         ),
       ),
-      onTap: () {
+      onTap: () async{
+
         // Resend you OTP via API or anything
         setState(() {});
       },
@@ -333,9 +335,11 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
     _controller.dispose();
     super.dispose();
   }
-
+  final AuthService _auth = AuthService();
+  TextEditingController phone = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
     _screenSize = MediaQuery.of(context).size;
     return new Scaffold(
       appBar: _getAppbar,

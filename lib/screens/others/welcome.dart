@@ -9,6 +9,7 @@ import 'package:helpalapp/screens/helpee/helpeeotpscreen.dart';
 import 'package:helpalapp/screens/helpee/helpeephonsignin.dart';
 import 'package:helpalapp/screens/helpee/helpeesignin.dart';
 import 'package:helpalapp/screens/helpee/helpeesignup.dart';
+import 'package:helpalapp/screens/helper/helperdashboard.dart';
 import 'package:helpalapp/screens/helper/helpersignin.dart';
 import 'package:helpalapp/screens/helper/helpersignup.dart';
 import 'package:helpalapp/widgets/gradbutton.dart';
@@ -102,6 +103,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   phonAutoVerified(String phone) async {
     await AuthService().saveLocalString(Appdetails.signinKey, "true");
+    print("phoneAutoVerified");
     await AuthService().saveLocalString(
         Appdetails.accountTypeKey, Appdetails.accountTypeValue_helpee);
     await _auth.saveDefaultLocalKeys(phone, "helpees");
@@ -126,18 +128,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   continueWithGoogle() async {
     final result = await AuthService().signInWithGoogle(context);
-    print(result);
+    print("result of login $result");
     if (result == true) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HelpeeSignup(),
+          builder: (context) => HelpeeDashboard(),
         ),
       );
     }
   }
 
-  continueWithFacebook() {}
+  continueWithFacebook() async{
+    final result = await AuthService().signInWithGoogle(context);
+    print("result of login $result");
+    if (result == true) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HelpeeDashboard(),
+        ),
+      );
+    }
+  }
+
   signupAsHelper() {
     Appdetails.loadScreen(mycontext, HelperSignup());
   }

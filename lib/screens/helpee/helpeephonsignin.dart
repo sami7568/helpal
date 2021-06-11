@@ -77,6 +77,7 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
     return image;
   }
 
+  //continue function here login with phone here
   continueWithPhone() {
     if (numberController.text.length < 10) {
       Alert(
@@ -268,6 +269,7 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
     );
   }
 
+  //continue button here
   getContinuewBtn() {
     return GradButton(
       child: ShadowText(
