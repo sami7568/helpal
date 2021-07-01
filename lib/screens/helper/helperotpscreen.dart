@@ -457,7 +457,8 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
           await AuthService().saveLocalString(
               Appdetails.accountTypeKey, Appdetails.accountTypeValue_helper);
           Navigator.pop(context);
-          //Pushing otp screen to display for entering the code manually
+          print("going to helperdashboard");
+          //Pushing otp screen to dashboard
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -470,6 +471,7 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
           OurServices _field = OurServices.Plumbers;
           if (myField == null) {
             Navigator.pop(context);
+            print("going to sigupPage ");
             //Pushing otp screen to display for entering the code manually
             Navigator.push(
               context,

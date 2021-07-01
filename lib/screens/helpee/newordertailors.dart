@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:helpalapp/functions/helpalstreams.dart';
 import 'package:helpalapp/functions/helpee/helpeeorders.dart';
 import 'package:helpalapp/functions/storagehandler.dart';
+import 'package:helpalapp/main.dart';
+import 'package:http/http.dart' as http;
 import 'package:helpalapp/screens/helpee/helpeedashboard.dart';
 import 'package:helpalapp/screens/helpee/locationpickfield.dart';
 import 'package:helpalapp/screens/helpee/newordertailorsadditem.dart';
@@ -28,7 +31,8 @@ class NewOrderTailors extends StatefulWidget {
       this.workerID,
       this.workerName,
       this.workerPhone,
-      this.workerField})
+      this.workerField,
+      })
       : super(key: key);
 
   @override
@@ -41,7 +45,6 @@ class _NewOrderTailorsState extends State<NewOrderTailors>
   BuildContext myContext;
 
   AnimationController _controller;
-
   TextEditingController comment = new TextEditingController();
   String _currentAddress = 'Select Your Location';
   bool isRecording = false;
@@ -146,8 +149,12 @@ class _NewOrderTailorsState extends State<NewOrderTailors>
           "Submitted Successfully\nPlease wait \nwe are connecting you with helper",
           AlertType.success,
           myContext, () {
+
+        //push Notifications
+        sendNotificationsToHelper(Appdetails.fcmtoken, context, orderId);
         Appdetails.loadScreen(myContext, HelpeeDashboard());
       });
+
     } else {
       DialogsHelpal.showMsgBox(
           "Error", result, AlertType.error, myContext, Appdetails.appBlueColor);
@@ -244,6 +251,35 @@ class _NewOrderTailorsState extends State<NewOrderTailors>
         }).toList(),
       ),
     );
+  }
+
+  void sendNotificationsToHelper(String token,context,String helper_id) async{
+    Map<String, dynamic> headerMap={
+      'content-type':'application/json',
+      'Authorization':fcmServerKey,
+    };
+    Map notificationMap = {
+      'body':'',
+      'title':'',
+    };
+    Map dataMap ={
+      'click_action':'FLUTTER_NOTIFICAITON_CLICK',
+      'id':1,
+      'status':'done',
+      'helperId':helper_id,
+    };
+    Map sendNotificationMap={
+      "notification":notificationMap,
+      "data":dataMap,
+      "priority":"high",
+      "to":fcmServerKey,
+    };
+    var res =await http.post(
+      'https://fcm.googleapis.com/fcm/send',
+      headers: headerMap,
+      body: jsonEncode(sendNotificationMap),
+    );
+
   }
 
   //Snackbar Laundry Basket

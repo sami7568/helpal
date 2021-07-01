@@ -562,167 +562,172 @@ class _HelpeeDashboardState extends State<HelpeeDashboard>
                             Spacer(),
                             GradButton(
                               onPressed: () {
-                                /* Alert(
-                            title: "Work Completed",
-                            context: context,
-                            style: AlertStyle(
-                              isOverlayTapDismiss: false,
-                              overlayColor: Colors.black.withAlpha(200),
-                              titleStyle: TextStyle(
-                                fontSize: 33,
-                                color: Appdetails.appBlueColor,
-                              ),
-                              alertPadding: EdgeInsets.all(5),
-                            ),
-                            content: Container(
-                              width: screenSize.width / 100 * 80,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        SizedBox(height: 30),
-                                        CircleAvatar(
-                                          maxRadius: 50,
-                                          backgroundImage: Image.asset(
-                                                  "assets/images/avatar.png")
-                                              .image,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Azmat Ali Khan",
-                                          style: TextStyle(
-                                            fontSize: 30,
-                                          ),
-                                        ),
-                                        Text(
-                                          "Plumber",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.grey[600]),
-                                        ),
-                                      ],
+                                Alert(
+                                  title: "Work Completed",
+                                  context: context,
+                                  style: AlertStyle(
+                                    isOverlayTapDismiss: false,
+                                    overlayColor: Colors.black.withAlpha(200),
+                                    titleStyle: TextStyle(
+                                      fontSize: 33,
+                                      color: Appdetails.appBlueColor,
                                     ),
+                                    alertPadding: EdgeInsets.all(5),
                                   ),
-                                  SizedBox(height: 30),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      InkWell(
-                                        onTap: () => setRatingState(1),
-                                        child: Icon(
-                                          Icons.star,
-                                          size: 40,
-                                          color: currentStars > 0
-                                              ? enableColor
-                                              : disableColor,
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () => setRatingState(2),
-                                        child: Icon(
-                                          Icons.star,
-                                          size: 40,
-                                          color: currentStars > 1
-                                              ? enableColor
-                                              : disableColor,
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () => setRatingState(3),
-                                        child: Icon(
-                                          Icons.star,
-                                          size: 40,
-                                          color: currentStars > 2
-                                              ? enableColor
-                                              : disableColor,
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () => setRatingState(4),
-                                        child: Icon(
-                                          Icons.star,
-                                          size: 40,
-                                          color: currentStars > 3
-                                              ? enableColor
-                                              : disableColor,
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () => setRatingState(5),
-                                        child: Icon(
-                                          Icons.star,
-                                          size: 40,
-                                          color: currentStars > 4
-                                              ? enableColor
-                                              : disableColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    currentText,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.grey[600],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 15),
+                                  content: Container(
+                                    width: screenSize.width / 100 * 80,
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Appdetails.appBlueColor
-                                                .withAlpha(40),
+                                          width: double.infinity,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SizedBox(height: 30),
+                                              CircleAvatar(
+                                                maxRadius: 50,
+                                                backgroundImage: Image.asset(
+                                                        "assets/images/avatar.png")
+                                                    .image,
+                                              ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                "Azmat Ali Khan",
+                                                style: TextStyle(
+                                                  fontSize: 30,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Plumber",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.grey[600]),
+                                              ),
+                                            ],
                                           ),
-                                          child: TextField(
-                                            keyboardType: TextInputType.name,
-                                            style: TextStyle(
-                                              fontSize: 18,
+                                        ),
+                                        SizedBox(height: 30),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () => setRatingState(1),
+                                              child: Icon(
+                                                Icons.star,
+                                                size: 40,
+                                                color: currentStars > 0
+                                                    ? enableColor
+                                                    : disableColor,
+                                              ),
                                             ),
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              hintText:
-                                                  'What needs to be improved?',
-                                              hintStyle:
-                                                  TextStyle(fontSize: 18),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 20),
+                                            InkWell(
+                                              onTap: () => setRatingState(2),
+                                              child: Icon(
+                                                Icons.star,
+                                                size: 40,
+                                                color: currentStars > 1
+                                                    ? enableColor
+                                                    : disableColor,
+                                              ),
                                             ),
-                                            maxLines: 4,
+                                            InkWell(
+                                              onTap: () => setRatingState(3),
+                                              child: Icon(
+                                                Icons.star,
+                                                size: 40,
+                                                color: currentStars > 2
+                                                    ? enableColor
+                                                    : disableColor,
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () => setRatingState(4),
+                                              child: Icon(
+                                                Icons.star,
+                                                size: 40,
+                                                color: currentStars > 3
+                                                    ? enableColor
+                                                    : disableColor,
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () => setRatingState(5),
+                                              child: Icon(
+                                                Icons.star,
+                                                size: 40,
+                                                color: currentStars > 4
+                                                    ? enableColor
+                                                    : disableColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          currentText,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey[600],
                                           ),
-                                        )
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 15),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Appdetails.appBlueColor
+                                                      .withAlpha(40),
+                                                ),
+                                                child: TextField(
+                                                  keyboardType:
+                                                      TextInputType.name,
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                  ),
+                                                  decoration: InputDecoration(
+                                                    border: InputBorder.none,
+                                                    hintText:
+                                                        'What needs to be improved?',
+                                                    hintStyle:
+                                                        TextStyle(fontSize: 18),
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20,
+                                                            vertical: 20),
+                                                  ),
+                                                  maxLines: 4,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            buttons: [
-                              DialogButton(
-                                  color: Appdetails.appBlueColor,
-                                  margin: EdgeInsets.symmetric(horizontal: 0),
-                                  child: Text(
-                                    "Submit Feedback",
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.white),
-                                  ),
-                                  onPressed: () {})
-                            ],
-                          ).show(); */
+                                  buttons: [
+                                    DialogButton(
+                                        color: Appdetails.appBlueColor,
+                                        margin:
+                                            EdgeInsets.symmetric(horizontal: 0),
+                                        child: Text(
+                                          "Submit Feedback",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white),
+                                        ),
+                                        onPressed: () {})
+                                  ],
+                                ).show();
                               },
                               child: Text(
                                 "Hire a Technician",
@@ -836,7 +841,7 @@ class _HelpeeDashboardState extends State<HelpeeDashboard>
                             Spacer(),
                             GradButton(
                               onPressed: () {
-                                //showWorkerModelTest(mycontext, "HLP00005");
+                                // showWorkerModelTest(mycontext, "HLP00005");
                               },
                               child: Text(
                                 "Make a donation",
@@ -928,7 +933,7 @@ class _HelpeeDashboardState extends State<HelpeeDashboard>
     );
   }
 
-  /* void showWorkerModelTest(BuildContext context, String workerID) async {
+   void showWorkerModelTest(BuildContext context, String workerID) async {
     //Getting details
     var worker = await AuthService()
         .firestoreRef
@@ -949,5 +954,5 @@ class _HelpeeDashboardState extends State<HelpeeDashboard>
     //Navigator.pop(context);
     //Open instance of worker model
     //WorkerModel(workerID, worker, context, coverImg, rating);
-  } */
+  }
 }

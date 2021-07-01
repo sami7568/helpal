@@ -534,8 +534,8 @@ class _OrderNavigationState extends State<OrderNavigation> {
     LatLng myLoc = new LatLng(locData.latitude, locData.longitude);
 
     String dest = currentOrder.data()["location"].toString().split("&&")[1];
-    double lat = double.parse(dest.split(',')[0]);
-    double lng = double.parse(dest.split(',')[1]);
+    double lat = double.tryParse(dest.split(',')[0]);
+    double lng = double.tryParse(dest.split(',')[1]);
     LatLng latLng = new LatLng(lat, lng);
     //Setting order destination
     Marker markerOwn = new Marker(

@@ -496,7 +496,7 @@ class _SearchForHelperState extends State<SearchForHelper> {
           }
         },
 
-        /* onTap: (argument) async {
+         onTap: (argument) async {
           Marker marker = new Marker(
             position: argument,
             markerId: new MarkerId('tappedLocation'),
@@ -504,7 +504,7 @@ class _SearchForHelperState extends State<SearchForHelper> {
           setState(() {
             nearbyMarkers.add(marker);
           });
-        }, */
+        },
         padding: EdgeInsets.symmetric(vertical: 75, horizontal: 10),
         markers: nearbyMarkers,
         onMapCreated: onMapCreated,

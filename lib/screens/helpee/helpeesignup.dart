@@ -35,6 +35,59 @@ class _HelpeeSignupState extends State<HelpeeSignup>
   AssetImage defaultAvatar = AssetImage('assets/images/avatar.png');
   File _image;
   final picker = ImagePicker();
+  Widget _avatar(double height) {
+    return Container(
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Container(
+          width: 35,
+          height: 35,
+          //padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Appdetails.appBlueColor,
+              borderRadius: BorderRadius.circular(100)),
+          child: Center(
+            child: IconButton(
+              icon: Icon(
+                Icons.edit,
+                color: Colors.white,
+              ),
+              onPressed: () => Appdetails.getImage(_scaffoldKey, getImage),
+            ),
+          ),
+        ),
+      ),
+
+      height: height / 100 * 10,
+      width: height / 100 * 10,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        image: DecorationImage(
+          image: _image == null ? defaultAvatar : FileImage(File(_image.path)),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+  Future getImage(ImageSource imageSource) async {
+    final pickedFile = await picker.getImage(
+        source: imageSource,
+        preferredCameraDevice: CameraDevice.front,
+        maxHeight: 350,
+        maxWidth: 350,
+        imageQuality: 80);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        print('Image File :' + pickedFile.path);
+        //cropImage();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
 
   //this is linked to sign in page
   //if user already have an account he/she can login
@@ -68,62 +121,10 @@ class _HelpeeSignupState extends State<HelpeeSignup>
     );
   }
 
-  Widget _avatar(double height) {
-    return Container(
-      child: Align(
-        alignment: Alignment.bottomRight,
-        child: Container(
-          width: 35,
-          height: 35,
-          //padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: Appdetails.appBlueColor,
-              borderRadius: BorderRadius.circular(100)),
-          child: Center(
-            child: IconButton(
-              icon: Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-              onPressed: () => Appdetails.getImage(_scaffoldKey, getImage),
-            ),
-          ),
-        ),
-      ),
-      height: height / 100 * 10,
-      width: height / 100 * 10,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        image: DecorationImage(
-          image: _image == null ? defaultAvatar : FileImage(File(_image.path)),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-
   void dpUploaded() {
     print('DP Uploaded CallBack');
   }
 
-  Future getImage(ImageSource imageSource) async {
-    final pickedFile = await picker.getImage(
-        source: imageSource,
-        preferredCameraDevice: CameraDevice.front,
-        maxHeight: 350,
-        maxWidth: 350,
-        imageQuality: 80);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        print('Image File :' + pickedFile.path);
-        //cropImage();
-      } else {
-        print('No image selected.');
-      }
-    });
-  }
 
   Future signUp(BuildContext context) async {
     String errorReason = "Please check details and try again!";

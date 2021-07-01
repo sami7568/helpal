@@ -67,7 +67,7 @@ class _PickLocationState extends State<PickLocation>
                   if (state == PinState.Idle) {
                     return Icon(Icons.place);
                   } else {
-                    return Icon(Icons.place);
+                    return Icon(Icons.place_outlined);
                   }
                 },
                 apiKey: Appdetails.mapsApiKey,

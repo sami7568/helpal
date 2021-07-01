@@ -40,6 +40,7 @@ extension CapExtension on String {
 }
 
 class Appdetails {
+  static String fcmtoken="";
   static String lastAddress = '';
   static String lastLatlng = '';
   static String lastMessageHistory = '';
@@ -196,7 +197,7 @@ class Appdetails {
     _scaffoldKey.currentState.showSnackBar(
       new SnackBar(
         duration: Duration(seconds: 10),
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.white,
         content: Container(
           height: 250,
           padding: EdgeInsets.only(bottom: 20),

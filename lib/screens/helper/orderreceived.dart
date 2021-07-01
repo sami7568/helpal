@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:helpalapp/screens/others/contactus.dart';
 import 'package:helpalapp/widgets/ShadowText.dart';
 import 'package:helpalapp/widgets/gradbutton.dart';
 import 'package:helpalapp/functions/appdetails.dart';
@@ -181,7 +182,7 @@ class _OrderReceivedState extends State<OrderReceived>
                                       InkWell(
                                         child: _playIcon(),
                                         onTap: () {
-                                          //Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUsPage()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUsPage()));
                                         },
                                       ),
                                       SizedBox(
@@ -190,7 +191,7 @@ class _OrderReceivedState extends State<OrderReceived>
                                       InkWell(
                                         child: _stopIcon(),
                                         onTap: () {
-                                          //Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUsPage()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUsPage()));
                                         },
                                       ),
                                       SizedBox(

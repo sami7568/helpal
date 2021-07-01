@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:helpalapp/functions/helpalstreams.dart';
+import 'package:helpalapp/functions/helpee/easyPaisa.dart';
 import 'package:helpalapp/functions/helper/helperorders.dart';
 import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/screens/helper/helperdashboard.dart';
@@ -114,7 +115,9 @@ class _HelpeeWalletDrawerState extends State<HelpeeWalletDrawer> {
                                           EdgeInsets.symmetric(horizontal: 5),
                                       child: MaterialButton(
                                         //minWidth: size.width / 100 * 75 / 2,
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=> easypaisa()));
+                                        },
                                         child: Text("Withdraw Credit"),
                                         color: Colors.white,
                                       ),

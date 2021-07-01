@@ -21,6 +21,18 @@ String fcmServerKey =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging fcm = FirebaseMessaging.instance;
+  NotificationSettings settings = await fcm.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  print('User granted permission: ${settings.authorizationStatus}');
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   //SharedPreferences.setMockInitialValues({});
   //Must init before app starts this will get data locally and fast
   bool sp = await HelpalStreams.initSharedPrefs();
@@ -31,14 +43,14 @@ void main() async {
   Appdetails.setServicesIcons();
   bool result = await AuthService().requestIosPermissionFCM();
   if (result) {
-    FirebaseMessaging.instance.getToken(vapidKey: fcmServerKey).then((value) {
-      HelpalStreams.prefs.setString("fcmtoken", value);
+    fcm.getToken(vapidKey: fcmServerKey).then((value) {
+      HelpalStreams.prefs.setString(Appdetails.fcmtoken, value);
     });
   }
   if (sp) {
     //Getting is this app running first time.?
     String isFirstTime = HelpalStreams.prefs.getString(Appdetails.firstTimeKey);
-
+    //String fcmtoken=HelpalStreams.prefs.getString(Appdetails.fcmtoken);
     //if this app runing first time this will return error
     //we will change error result to true
     if (isFirstTime == null || isFirstTime == "")
@@ -48,7 +60,15 @@ void main() async {
         HelpalStreams.prefs.getString(Appdetails.firstTimeKey);
     //getting output in editor console
     print("Running App First Time =   $isFirstTime");
+
   }
+}
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
 }
 
 class MyApp extends StatefulWidget {
@@ -111,9 +131,9 @@ class _MyAppState extends State<MyApp> {
     var generalNotificationDetails =
         new NotificationDetails(android: androidDetails, iOS: iSODetails);
 
-    /* await fltrNotification.show(
+     await fltrNotification.show(
         0, "Task", "You created a Task", 
-        generalNotificationDetails, payload: "Task"); */
+        generalNotificationDetails, payload: "Task");
 
     //var scheduledTime = TZDateTime.now().add(Duration(seconds: 10));
     var scheduledTime =

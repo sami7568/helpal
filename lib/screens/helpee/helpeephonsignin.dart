@@ -110,7 +110,7 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HelpeeDashboard(),
+        builder: (context) => HelpeeSignup(phoneNumber: phone,),
       ),
     );
   }
@@ -291,7 +291,7 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     Color ovrly = Color.fromARGB(100, 0, 0, 0);
     mycontext = context;
     Size screenSize = MediaQuery.of(context).size;

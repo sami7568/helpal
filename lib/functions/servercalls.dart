@@ -24,7 +24,6 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore firestoreRef = FirebaseFirestore.instance;
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
-
   Future<bool> requestIosPermissionFCM() async {
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
@@ -40,7 +39,6 @@ class AuthService {
     else
       return false;
   }
-
   void registerEventsForFCM() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
@@ -51,25 +49,18 @@ class AuthService {
       }
     });
   }
-
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
+  Future<void> firebaseMessagingBackgroundHandler() async {
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
     await Firebase.initializeApp();
-
-    print("Handling a background message: ${message.messageId}");
   }
-
   //////////////////////////////////////////
   //Variables region
   //////////////////////////////////////////
   //obtain shared preferences
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
   //this is last logeding account type helpee or helper
   AccountTypes currentAccount = AccountTypes.HelpeeAccount;
-
   //////////////////////////////////////////
   //Getting account type from other scripts
   //////////////////////////////////////////
@@ -81,7 +72,6 @@ class AuthService {
       return AccountTypes.HelperAccount;
     }
   }
-
   /////////////////////////////////////////////
   //Setting account type while login or signup
   /////////////////////////////////////////////
@@ -94,10 +84,9 @@ class AuthService {
           Appdetails.accountTypeKey, Appdetails.accountTypeValue_helper);
     }
   }
-
   //////////////////////////////////////////
   //Verification code entering manual
-  //////////////////////////////////////////
+  /////////////////////////////////////////
   Future<dynamic> verifyCode(String userInputCode, BuildContext context) async {
     print("You input code $userInputCode");
 
@@ -139,12 +128,10 @@ class AuthService {
       return e.toString();
     }
   }
-
   ///////////////////////////////////////////
   ///Login user with phone authentication
   ///////////////////////////////////////////
   void loginUserWithPhone(String phone, BuildContext context,
-
     Function autoVerfyCallback, Function otpScreenCallback) async {
     print("Received call for $phone");
     //Creating a formated phone variable
@@ -158,6 +145,7 @@ class AuthService {
     //showing loading indicator
     DialogsHelpal.showLoadingDialog(context, false);
 
+    print("verifyphone");
     //Starting verification process
     await _auth.verifyPhoneNumber(
       //given phone number
@@ -167,8 +155,10 @@ class AuthService {
       //if verified automatically
       verificationCompleted: (AuthCredential credential) async {
         //creating credentional variable
+        print("creating credentional variable");
         UserCredential result = await _auth.signInWithCredential(credential);
         //after getting credentionals closing loading indicator
+        print("after getting credentionals");
         Navigator.pop(context);
         //getting user from credentions
         User user = result.user;
@@ -177,8 +167,11 @@ class AuthService {
         if (user != null) {
           //saving current user variable as static
           Appdetails.currentUser = user;
+          //print(user);
+          print("user ");
           //pushing dashboard to screen
           autoVerfyCallback(formatedPhone);
+          print("autoverified");
         } else {
           //turning user to null if verification process had any error
           Appdetails.currentUser = null;
@@ -193,6 +186,7 @@ class AuthService {
         //sending execption back as print but it should in a box to display the problem
         print("Verification Failed\n" + exception.toString());
       },
+
       //this will called when code sent on users phone
       codeSent: (String verificationId, [int forceResendingToken]) {
         print("Verify ID Sent = $verificationId");
@@ -208,7 +202,6 @@ class AuthService {
       },
     );
   }
-
   //////////////////////////////////////////
   //Google Signin Firebase
   //////////////////////////////////////////
@@ -248,7 +241,6 @@ class AuthService {
     }
   }
   //END Sign in With Google
-
   //////////////////////////////////////////
   //Signin User with Facebook
   //////////////////////////////////////////
@@ -282,7 +274,6 @@ class AuthService {
 
     return 'Signed out';
   }
-
   //////////////////////////////////////////
   //Register with email and password
   //////////////////////////////////////////
@@ -303,7 +294,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Login with email and password
   //////////////////////////////////////////
@@ -320,7 +310,6 @@ class AuthService {
       }
     }
   }
-
   ///////////////////////////////////////////////////
   //getting new unique id while registering new user
   ///////////////////////////////////////////////////
@@ -342,7 +331,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Getting online helpers
   //////////////////////////////////////////
@@ -358,7 +346,6 @@ class AuthService {
       return 0;
     }
   }
-
   Future changeStatusOnline() async {
     String myphone = HelpalStreams.prefs.getString(Appdetails.phoneKey);
     String myid = HelpalStreams.prefs.getString(Appdetails.myidKey);
@@ -379,7 +366,6 @@ class AuthService {
       }
     }
   }
-
   Future changeStatusOffline() async {
     String myphone = HelpalStreams.prefs.getString(Appdetails.phoneKey);
     if (myphone == '' || myphone == null)
@@ -394,7 +380,6 @@ class AuthService {
       }
     }
   }
-
   Future changeStatusAccepted() async {
     String myphone = HelpalStreams.prefs.getString(Appdetails.phoneKey);
     String myid = HelpalStreams.prefs.getString(Appdetails.myidKey);
@@ -415,7 +400,6 @@ class AuthService {
       }
     }
   }
-
   Future changeStatusWorking() async {
     String myphone = HelpalStreams.prefs.getString(Appdetails.phoneKey);
     if (myphone == '' || myphone == null)
@@ -430,7 +414,6 @@ class AuthService {
       }
     }
   }
-
   //////////////////////////////////////////
   //Checking if user's details are exists
   //////////////////////////////////////////
@@ -448,7 +431,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Checking if user's details are exists
   //////////////////////////////////////////
@@ -467,7 +449,6 @@ class AuthService {
       return "Error:" + e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Getting user info Map<String , dynamic>
   //////////////////////////////////////////
@@ -485,7 +466,6 @@ class AuthService {
       return "Error:" + e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Gettig all users in collection
   //////////////////////////////////////////
@@ -497,7 +477,6 @@ class AuthService {
       return null;
     }
   }
-
   /////////////////////////////////////////////////////
   //Getting a single field from user data type dynamic
   /////////////////////////////////////////////////////
@@ -516,7 +495,6 @@ class AuthService {
       return null;
     }
   }
-
   //////////////////////////////////////////////
   //Getting single field with where condition
   //////////////////////////////////////////////
@@ -536,7 +514,6 @@ class AuthService {
       return null;
     }
   }
-
   //////////////////////////////////////////
   //Updating information to firestore user
   //////////////////////////////////////////
@@ -552,7 +529,6 @@ class AuthService {
 
     return result;
   }
-
   //////////////////////////////////////////
   //Update user info
   //////////////////////////////////////////
@@ -568,7 +544,6 @@ class AuthService {
 
     return result;
   }
-
   //////////////////////////////////////////
   //Change profile details
   //////////////////////////////////////////
@@ -585,7 +560,6 @@ class AuthService {
     dynamic result = await updateDocument(collection, phone, userdetail);
     return result;
   }
-
   //////////////////////////////////////////
   //Create new user with given data
   //////////////////////////////////////////
@@ -598,7 +572,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Getting saved addresses
   //////////////////////////////////////////
@@ -623,7 +596,6 @@ class AuthService {
       return 'Error:' + e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Create new user with given data
   //////////////////////////////////////////
@@ -691,7 +663,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Create new user with given data
   //////////////////////////////////////////
@@ -736,7 +707,6 @@ class AuthService {
       return 'Error:' + e.toString();
     }
   }
-
   ///////////////////////////////////////////////////////////
   //Saving details locally so we can access name and etc...
   ///////////////////////////////////////////////////////////
@@ -765,7 +735,6 @@ class AuthService {
       print('Default Local Keys Saved');
     }
   }
-
   //////////////////////////////////////////
   //Save a local key
   //////////////////////////////////////////
@@ -773,7 +742,6 @@ class AuthService {
     HelpalStreams.prefs.setString(key, value);
     print(key + ' saved local key with value = ' + value);
   }
-
   //////////////////////////////////////////
   //Save a local key book
   //////////////////////////////////////////
@@ -785,12 +753,10 @@ class AuthService {
 
     print(key + ' saved local key with value = $value');
   }
-
   void saveHive(String key, String value) {
     var box = Hive.box("myldb");
     box.put(key, value);
   }
-
   //////////////////////////////////////////
   //Get a local saved key
   //////////////////////////////////////////
@@ -801,7 +767,6 @@ class AuthService {
     // get value
     return s;
   }
-
   //////////////////////////////////////////
   //Get a local saved key
   //////////////////////////////////////////
@@ -812,7 +777,6 @@ class AuthService {
     // get value
     return s;
   }
-
   //////////////////////////////////////////
   //Checking if local key exist
   //////////////////////////////////////////
@@ -823,7 +787,6 @@ class AuthService {
     // get value
     return b;
   }
-
   //////////////////////////////////////////
   //Clearing app Data
   //////////////////////////////////////////
@@ -833,7 +796,6 @@ class AuthService {
     signOut();
     return true;
   }
-
   //////////////////////////////////////////
   //Share balance from wallet using phone
   //////////////////////////////////////////
@@ -882,7 +844,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Add credit to wallet
   //////////////////////////////////////////
@@ -914,7 +875,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //////////////////////////////////////////
   //Withdraw amount from wallet
   //////////////////////////////////////////
@@ -944,7 +904,6 @@ class AuthService {
       return e.toString();
     }
   }
-
   //accountType = field like EasypesaAccount, Bankaccount
   Future changeAccountumber(String accountType, String accountNumber) async {
     //account number here

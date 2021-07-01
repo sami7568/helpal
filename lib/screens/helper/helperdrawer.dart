@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:helpalapp/functions/servercalls.dart';
+import 'package:helpalapp/screens/helper/neworderslist.dart';
 import 'package:helpalapp/screens/others/contactus.dart';
 import 'package:helpalapp/functions/appdetails.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
@@ -28,6 +29,14 @@ class _HelperDrawerState extends State<HelperDrawer> {
     setState(() {
       phone = _phone;
     });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    //firebase notification initialize here
+
   }
 
   @override
@@ -152,7 +161,7 @@ class _HelperDrawerState extends State<HelperDrawer> {
                         padding: EdgeInsets.all(20),
                         child: Column(
                           children: [
-                            /* ListTile(
+                             ListTile(
                               leading: Image.asset(
                                 "assets/images/icons/waiting.png",
                                 height: 25,
@@ -165,7 +174,7 @@ class _HelperDrawerState extends State<HelperDrawer> {
                             Divider(
                               height: 5,
                               color: Appdetails.grey3,
-                            ), */
+                            ),
                             ListTile(
                               leading: Image.asset(
                                 "assets/images/icons/help.png",
@@ -192,18 +201,20 @@ class _HelperDrawerState extends State<HelperDrawer> {
                               height: 5,
                               color: Appdetails.grey3,
                             ),
-                            /* ListTile(
+                             ListTile(
                               leading: Image.asset(
                                 "assets/images/icons/feedback.png",
                                 height: 25,
                               ),
                               title: Text('Feedback'),
-                              onTap: () {},
+                              onTap: () {
+
+                              },
                             ),
                             Divider(
                               height: 5,
                               color: Appdetails.grey3,
-                            ), */
+                            ),
                             ListTile(
                               leading: Image.asset(
                                 "assets/images/mainlogo.png",
