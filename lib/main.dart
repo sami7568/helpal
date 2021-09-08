@@ -7,6 +7,7 @@ import 'package:helpalapp/AuthenticationProvider.dart';
 import 'package:helpalapp/functions/appdetails.dart';
 import 'package:helpalapp/functions/helpalstreams.dart';
 import 'package:helpalapp/functions/servercalls.dart';
+import 'package:helpalapp/screens/helper/local_notification_service.dart';
 import 'package:helpalapp/screens/others/splashscreen.dart';
 import 'package:helpalapp/screens/others/welcome.dart';
 import 'package:helpalapp/screens/others/wrapper.dart';
@@ -15,12 +16,17 @@ import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'screens/helper/orderpage.dart';
+
 var showSplash = false;
 String fcmServerKey =
     "AAAAA3HPyac:APA91bHksmRKRhKDQMlnF07cCpQhsLDIorCk603EG_nR0vEbSh-xo4EHsEfkju87U7gh2Z2eOapDwmGswI_ClnYtbPMgaDJ2_QHju-fyQZ2fXg25NXqLZctdAeWgzPCFh-xDdNlY9bfj";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging fcm = FirebaseMessaging.instance;
   /* NotificationSettings settings = await fcm.requestPermission(
     alert: true,
@@ -64,15 +70,14 @@ void main() async {
   }
 }
 
-/*
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
 
-  print("Handling a background message: ${message.messageId}");
+  print("Handling a background message: ${message.data}");
+  print(message.notification.title);
 }
-*/
 
 class MyApp extends StatefulWidget {
   static final navigatorKey = GlobalKey<NavigatorState>();
@@ -92,14 +97,41 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     setupTimeZones();
-
-    FirebaseMessaging.instance.getInitialMessage();
+    LocalNotificationService.initialize(context);
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if(message!=null){
+        final routeFromMessage= message.data;
+        print(routeFromMessage);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderPage(),
+          ),
+        );
+      }
+    });
 
     //foreground message
     FirebaseMessaging.onMessage.listen((message) {
       if(message.notification!=null){
         print(message.notification.body);
         print(message.notification.title);
+      }
+      LocalNotificationService.display(message);
+    });
+
+    //only works when the app is in the background and open
+    //when user tap on the notification
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if(message.data!=null){
+        final routeFromMesssage = message.data["route"];
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderPage(),
+          ),
+        );
+        print(routeFromMesssage);
       }
     });
   }
