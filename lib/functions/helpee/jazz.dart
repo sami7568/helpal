@@ -4,14 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class JazzCashPage extends StatefulWidget {
+  JazzCashPage({Key key, this.title}) : super(key: key);
   final String title;
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _JazzCashPageState createState() => _JazzCashPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _JazzCashPageState extends State<JazzCashPage> {
   payment() async {
     var digest;
     String dateandtime = DateFormat("yyyyMMddHHmmss").format(DateTime.now());

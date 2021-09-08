@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,23 +13,33 @@ import 'package:helpalapp/functions/helpalstreams.dart';
 import 'package:helpalapp/functions/helper/helperorders.dart';
 import 'package:helpalapp/screens/helpee/helpeedashboard.dart';
 import 'package:helpalapp/screens/helpee/helpeeotpscreen.dart';
+import 'package:helpalapp/screens/others/alertcustom.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
 import 'package:hive/hive.dart';
+import 'package:http/http.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+/*
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+*/
 
 class AuthService {
+  BuildContext context;
   //////////////////////////////////////////
   //Instances of firebase
   //////////////////////////////////////////
   /////Firebase and firestore
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore firestoreRef = FirebaseFirestore.instance;
+
+  ///////////////////////////////////
+  //firebase messaging
+  //////////////////////////////////
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
   Future<bool> requestIosPermissionFCM() async {
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
-      announcement: false,
+      announcement: true,
       badge: true,
       carPlay: false,
       criticalAlert: false,
@@ -43,9 +55,16 @@ class AuthService {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
-
+      AlertAz(
+       title: (message.data).toString(),
+        context: context,
+      ).show();
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
+        AlertAz(
+          title: (message.notification).toString(),
+          context: context,
+        ).show();
       }
     });
   }
@@ -54,6 +73,7 @@ class AuthService {
     // make sure you call `initializeApp` before using other Firebase services.
     await Firebase.initializeApp();
   }
+
   //////////////////////////////////////////
   //Variables region
   //////////////////////////////////////////
@@ -72,6 +92,7 @@ class AuthService {
       return AccountTypes.HelperAccount;
     }
   }
+
   /////////////////////////////////////////////
   //Setting account type while login or signup
   /////////////////////////////////////////////
@@ -146,6 +167,20 @@ class AuthService {
     DialogsHelpal.showLoadingDialog(context, false);
 
     print("verifyphone");
+    //use of api
+   /* Response response= await get("https://admin.j6stores.com/index.php/Api/get_otp?&phone=+923038828823");
+    print(response.body);
+    print(response.statusCode);
+    String data = response.body;
+
+    var decodeData = jsonDecode(data);
+    var code = decodeData['code'];
+    var res = decodeData['responce'];
+    print("otp code and res");
+    print(code);
+    print(res);
+*/
+
     //Starting verification process
     await _auth.verifyPhoneNumber(
       //given phone number
@@ -202,6 +237,7 @@ class AuthService {
       },
     );
   }
+
   //////////////////////////////////////////
   //Google Signin Firebase
   //////////////////////////////////////////
@@ -240,21 +276,21 @@ class AuthService {
       return e.toString();
     }
   }
+
   //END Sign in With Google
   //////////////////////////////////////////
   //Signin User with Facebook
   //////////////////////////////////////////
-   /*Future<UserCredential> signInWithFacebook() async {
+  Future<UserCredential> signInWithFacebook() async {
     // Trigger the sign-in flow
-    final LoginResult result = await FacebookAuth.instance.login();
+   /* final AccessToken result = await FacebookAuth.instance.login();
 
     // Create a credential from the access token
-    final FacebookAuthCredential facebookAuthCredential =
-      FacebookAuthProvider.credential(result.accessToken.token);
+    final facebookAuthCredential = FacebookAuthProvider.credential(result.token);
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }*/
+    return await FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);*/
+  }
   //////////////////////////////////////////
   //Signout user
   //////////////////////////////////////////
@@ -346,6 +382,10 @@ class AuthService {
       return 0;
     }
   }
+
+  ///////////////////////////////////////
+  //Changeing status
+  ///////////////////////////////////////
   Future changeStatusOnline() async {
     String myphone = HelpalStreams.prefs.getString(Appdetails.phoneKey);
     String myid = HelpalStreams.prefs.getString(Appdetails.myidKey);
@@ -414,6 +454,7 @@ class AuthService {
       }
     }
   }
+
   //////////////////////////////////////////
   //Checking if user's details are exists
   //////////////////////////////////////////
@@ -717,6 +758,7 @@ class AuthService {
     } else if (result == "User Data Not Exist") {
       print('User phone is invalid');
     } else {
+      print("saving local strings");
       Map<String, dynamic> finalResult = result as Map;
       //Saving key for signed in
       await saveLocalString(Appdetails.signinKey, "true");

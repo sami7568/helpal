@@ -17,12 +17,12 @@ import 'package:timezone/timezone.dart' as tz;
 
 var showSplash = false;
 String fcmServerKey =
-    "BALS2VG7sUfzH6tIDZEPNoLWHF2l8JLlAaXBbhOIRHjantDAvzeDEwp-SGaXiuQ2UYNrSIcln8qaB338iSMBA5w";
+    "AAAAA3HPyac:APA91bHksmRKRhKDQMlnF07cCpQhsLDIorCk603EG_nR0vEbSh-xo4EHsEfkju87U7gh2Z2eOapDwmGswI_ClnYtbPMgaDJ2_QHju-fyQZ2fXg25NXqLZctdAeWgzPCFh-xDdNlY9bfj";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging fcm = FirebaseMessaging.instance;
-  NotificationSettings settings = await fcm.requestPermission(
+  /* NotificationSettings settings = await fcm.requestPermission(
     alert: true,
     announcement: false,
     badge: true,
@@ -30,9 +30,9 @@ void main() async {
     criticalAlert: false,
     provisional: false,
     sound: true,
-  );
-  print('User granted permission: ${settings.authorizationStatus}');
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  );*/
+ // print('User granted permission: ${settings.authorizationStatus}');
+  //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   //SharedPreferences.setMockInitialValues({});
   //Must init before app starts this will get data locally and fast
   bool sp = await HelpalStreams.initSharedPrefs();
@@ -63,6 +63,8 @@ void main() async {
 
   }
 }
+
+/*
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
@@ -70,6 +72,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   print("Handling a background message: ${message.messageId}");
 }
+*/
 
 class MyApp extends StatefulWidget {
   static final navigatorKey = GlobalKey<NavigatorState>();
@@ -89,6 +92,16 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     setupTimeZones();
+
+    FirebaseMessaging.instance.getInitialMessage();
+
+    //foreground message
+    FirebaseMessaging.onMessage.listen((message) {
+      if(message.notification!=null){
+        print(message.notification.body);
+        print(message.notification.title);
+      }
+    });
   }
 
   void setupTimeZones() async {

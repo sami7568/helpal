@@ -1,32 +1,18 @@
-/*
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-class PushNotificationService{
-  FirebaseMessaging _fcm= FirebaseMessaging();
-
-  Future initialize(){
-    if(Platform.isIOS){
-      // request permission if we are on ios device
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
-    }
-    _fcm.configure(
-      onMessage: (Map<String,dynamic> message)async{
-        print("onMessage: $message");
-      },
-      onLaunch: (Map<String,dynamic> message)async{
-      print("onMessage: $message");
-    },
-    onResume: (Map<String,dynamic> message)async{
-      print("onMessage: $message");
-    }
-    );
-
-  }
-}*/
 import 'package:notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+class PushNotificationService{
+ final FirebaseMessaging fcm= FirebaseMessaging.instance;
+
+  Future initialize(){
+
+    fcm.getToken();
+
+  }
+}
 
 
 class notification extends StatefulWidget {

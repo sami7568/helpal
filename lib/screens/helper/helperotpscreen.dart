@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -191,12 +192,133 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
         ),
       ),
       onTap: () async{
-
+        _startCountdown();
         // Resend you OTP via API or anything
-        setState(() {});
+        resendCode();
+         setState(() {
+        });
       },
     );
   }
+
+  void resendCode() async{
+    print(phone.text);
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+        // ANDROID ONLY!
+        // Sign the user in (or link) with the auto-generated credential
+        await _auth.signInWithCredential(credential);
+      },
+        verificationFailed: (FirebaseAuthException exception) {
+          if (exception.code == 'invalid-phone-number') {
+            print('The provided phone number is not valid.');
+          }
+          DialogsHelpal.showMsgBox(
+              "Failed", exception.message, AlertType.error, context, Colors.grey);
+      },
+
+       codeSent : (String verificationId, [int forceResendingToken]) {
+        print("Verify ID Sent = $verificationId");
+
+        //adding verification id to a variable so we can veryfy with this later
+        Appdetails.lastVerifyID = verificationId;
+        //closing loading indicator
+       // Navigator.pop(context);
+        //Pushing otp screen to display for entering the code manually
+      },
+
+      timeout: const Duration(seconds: 60),
+      codeAutoRetrievalTimeout: (String verificationId) {
+        // Auto-resolution timed out...
+      },
+
+
+    );
+  }
+
+  /*void resendAuthCode()async{
+    print("Received call for $phone");
+    //Creating a formated phone variable
+    //adding +92 at as country code
+    //showing loading indicator
+    DialogsHelpal.showLoadingDialog(context, false);
+
+    print("verifyphone");
+    //use of api
+    *//* Response response= await get("https://admin.j6stores.com/index.php/Api/get_otp?&phone=+923038828823");
+    print(response.body);
+    print(response.statusCode);
+    String data = response.body;
+
+    var decodeData = jsonDecode(data);
+    var code = decodeData['code'];
+    var res = decodeData['responce'];
+    print("otp code and res");
+    print(code);
+    print(res);
+*/
+/*
+
+    //Starting verification process
+    await _auth.verifyPhoneNumber(
+      //given phone number
+      phoneNumber: "+92"+phone.text,
+      //timeout for auto verification or code seding
+      timeout: Duration(seconds: 90),
+      //if verified automatically
+      verificationCompleted: (AuthCredential credential) async {
+        //creating credentional variable
+        print("creating credentional variable");
+        UserCredential result = await _auth.signInWithCredential(credential);
+        //after getting credentionals closing loading indicator
+        print("after getting credentionals");
+        Navigator.pop(context);
+        //getting user from credentions
+        User user = result.user;
+        print("Authenticating USer phone number ::  $user ");
+        //checking if user is not null so proceed to dashboard
+        if (user != null) {
+          //saving current user variable as static
+          Appdetails.currentUser = user;
+          //print(user);
+          print("user ");
+          //pushing dashboard to screen
+          autoVerfyCallback(formatedPhone);
+          print("autoverified");
+        } else {
+          //turning user to null if verification process had any error
+          Appdetails.currentUser = null;
+        }
+      },
+      //failed verification
+      verificationFailed: (FirebaseAuthException exception) {
+        //closing loading indicator
+        Navigator.pop(context);
+        DialogsHelpal.showMsgBox(
+            "Failed", exception.message, AlertType.error, context, Colors.grey);
+        //sending execption back as print but it should in a box to display the problem
+        print("Verification Failed\n" + exception.toString());
+      },
+
+      //this will called when code sent on users phone
+      codeSent: (String verificationId, [int forceResendingToken]) {
+        print("Verify ID Sent = $verificationId");
+        //adding verification id to a variable so we can veryfy with this later
+        Appdetails.lastVerifyID = verificationId;
+        //closing loading indicator
+        Navigator.pop(context);
+        //Pushing otp screen to display for entering the code manually
+        otpScreenCallback(formatedPhone);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        //Navigator.pop(context);
+      },
+    );
+  }
+*/
+
 
   // Returns "Otp" keyboard
   get _getOtpKeyboard {
@@ -335,8 +457,10 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
     _controller.dispose();
     super.dispose();
   }
+
   final AuthService _auth = AuthService();
   TextEditingController phone = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
 
@@ -437,7 +561,7 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
 
   void otpEntered(String otp) async {
     DialogsHelpal.showLoadingDialog(context, true);
-    dynamic isCorrect = await AuthService().verifyCode(otp, context);
+    dynamic isCorrect = await _auth.verifyCode(otp, context);
     if (isCorrect == true) {
       print("Correct OTP");
       if (callBack != null) {
@@ -447,14 +571,15 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
       }
       //after auth checking if account exist in database
       dynamic isExist =
-          await AuthService().ifDetailsExists('helpers', phoneNumber);
+          await _auth.ifDetailsExists('helpers', phoneNumber);
       //if exist
       if (isExist == true) {
-        dynamic isSignedup = await AuthService().ifHelperSignedup(phoneNumber);
+        dynamic isSignedup = await _auth.ifHelperSignedup(phoneNumber);
+
         if (isSignedup == true) {
-          await AuthService().saveDefaultLocalKeys(phoneNumber, 'helpers');
-          await AuthService().saveLocalString(Appdetails.signinKey, "true");
-          await AuthService().saveLocalString(
+          await _auth.saveDefaultLocalKeys(phoneNumber, 'helpers');
+          await _auth.saveLocalString(Appdetails.signinKey, "true");
+          await _auth.saveLocalString(
               Appdetails.accountTypeKey, Appdetails.accountTypeValue_helper);
           Navigator.pop(context);
           print("going to helperdashboard");
@@ -465,34 +590,44 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
               builder: (context) => HelperDash(),
             ),
           );
-        } else {
-          final myField = await AuthService()
+        }
+        else {
+
+          final myField = await _auth
               .getDocuementField("helpers", phoneNumber, 'field');
+
           OurServices _field = OurServices.Plumbers;
           if (myField == null) {
             Navigator.pop(context);
             print("going to sigupPage ");
-            //Pushing otp screen to display for entering the code manually
+            //Pushing otp screen to display signup page()
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HelperSignup(),
+                builder: (context) => HelperSignupDetails(),
               ),
             );
-          } else {
-            if (myField == "drycleaner")
+          }
+          else {
+            if (myField == "drycleaner") {
               _field = OurServices.Drycleaners;
+            }
             else if (myField == "tailor") {
               _field = OurServices.Tailors;
-            } else if (myField == "plumber") {
+            }
+            else if (myField == "plumber") {
               _field = OurServices.Plumbers;
-            } else if (myField == "electrician") {
+            }
+            else if (myField == "electrician") {
               _field = OurServices.Electricians;
-            } else if (myField == "deliveryservice") {
+            }
+            else if (myField == "deliveryservice") {
               _field = OurServices.DeliveryService;
-            } else if (myField == "helpalbike") {
+            }
+            else if (myField == "helpalbike") {
               _field = OurServices.HelpalBike;
-            } else if (myField == "helpalcab") {
+            }
+            else if (myField == "helpalcab") {
               _field = OurServices.HelpalCab;
             }
 
@@ -502,7 +637,7 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    HelperSignupDetails(myField: _field, myPhone: phoneNumber),
+                    HelperSignupDetails(myField: _field,myPhone: phoneNumber,),
               ),
             );
           }
@@ -517,7 +652,8 @@ class _HelperOtpScreenState extends State<HelperOtpScreen>
             builder: (context) => HelperSignup(),
           ),
         );
-      } else {
+      }
+      else {
         DialogsHelpal.showMsgBoxCallback(
             "Error",
             isExist + "\nPlease Contect Providers",

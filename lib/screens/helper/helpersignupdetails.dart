@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:helpalapp/functions/appdetails.dart';
@@ -98,6 +99,13 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
   @override
   void initState() {
     super.initState();
+  }
+  String token;
+  void firebaseToken(){
+    FirebaseMessaging fcm = FirebaseMessaging.instance;
+    token = fcm.getToken().toString();
+    //save it to the helpers data
+
   }
 
   @override
@@ -491,14 +499,14 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
         child: Row(
           children: [
             Text(
-              "Are you Individual.?",
-              style: TextStyle(fontSize: 22),
+              "Are you Individual.?".toUpperCase(),
+              style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),
             ),
             Expanded(child: Container()),
-            Text(
+            /*Text(
               "Yes",
               style: TextStyle(fontSize: 22),
-            ),
+            ),*/
             Checkbox(
                 activeColor: Appdetails.appGreenColor,
                 value: isindivisual,
@@ -672,11 +680,26 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
   getDelivery() {
     List<Widget> wl = new List();
     //Field Type
-    var f1 = getVehicleTypeField();
+    //var f1 = getVehicleTypeField();
+    var f1 = new CusTextField(
+      capitalization: TextCapitalization.characters,
+      hint: 'Vehicle Maker (Honda)',
+      icon: Icon(Icons.card_giftcard),
+      validator: (val) => val.isEmpty ? 'Please Provide Vehicle Maker' : null,
+      onChanged: (val) => setState(() => _vehiclemaker = val),
+    );
+
     //Field Makers
     List<String> makers = ['Select Maker', "Honda", "Suzuki", "Road Prince"];
 
-    var f2 = getVehicleMakerField(makers);
+    //var f2 = getVehicleMakerField(makers);
+    var f2 = new CusTextField(
+      capitalization: TextCapitalization.characters,
+      hint: 'Vehicle Number (IDM-550)',
+      icon: Icon(Icons.model_training),
+      validator: (val) => val.isEmpty ? 'Please Provide Vehicle Modle' : null,
+      onChanged: (val) => setState(() => _vehiclemodel = val),
+    );
     //Year Field
     var f3 = getVehicleModelsField();
     var f4 = new CusTextField(
@@ -827,6 +850,8 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
   getHelpalBike() {
     List<Widget> wl = new List();
     //Field Makers
+
+    // this needs to be changes to input feilds
     List<String> makers = [
       'Select Maker',
       'Honda',
@@ -839,9 +864,23 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
       'Other'
     ];
     //maker
-    var f1 = getVehicleMakerField(makers);
+    //var f1 = getVehicleMakerField(makers);
+    var f1 = new CusTextField(
+      hint: "Bike Maker(Honda)",
+      capitalization: TextCapitalization.characters,
+      icon: Icon(Icons.directions_bike_outlined),
+      validator: (val)=>val.isEmpty?"Please Provide Bike Maker":null,
+      onChanged: (val) => setState(() => _vehiclemaker = val),
+    );
     //model
-    var f2 = getVehicleModelsField();
+    //var f2 = getVehicleModelsField();
+    var f2 = new CusTextField(
+      hint: "Bike Modle(2020)",
+      capitalization: TextCapitalization.characters,
+      icon: Icon(Icons.calendar_today),
+      validator: (val)=>val.isEmpty?"Please Provide Bike Modle":null,
+      onChanged: (val) => setState(() => _vehiclemodel = val),
+    );
     //number
     var f3 = new CusTextField(
       hint: 'Bike Number (RLC-110)',
@@ -931,9 +970,21 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
       'Other'
     ];
     //maker
-    var f1 = getVehicleMakerField(makers);
+    //var f1 = getVehicleMakerField(makers);
+    var f1 = new CusTextField(
+      hint: 'Car Maker (Honda)',
+      icon: Icon(Icons.confirmation_number),
+      validator: (val) => val.isEmpty ? 'Please Provide Car Maker' : null,
+      onChanged: (val) => setState(() => _vehiclemaker = val),
+    );
     //model
-    var f2 = getVehicleModelsField();
+    //var f2 = getVehicleModelsField();
+    var f2 = new CusTextField(
+      hint: 'Car Model (2020)',
+      icon: Icon(Icons.confirmation_number),
+      validator: (val) => val.isEmpty ? 'Please Provide Car Model' : null,
+      onChanged: (val) => setState(() => _vehiclenumber = val),
+    );
     //number
     var f3 = new CusTextField(
       hint: 'Car Number (RLC-110)',

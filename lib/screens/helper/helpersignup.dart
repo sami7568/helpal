@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/functions/storagehandler.dart';
 import 'package:helpalapp/screens/helpee/helpeephonsignin.dart';
@@ -40,7 +41,8 @@ class _HelperSignupState extends State<HelperSignup> {
 
   //Text Controller
   TextEditingController fullnameConroller = TextEditingController();
-  TextEditingController cnicConroller = TextEditingController();
+  MaskedTextController cnicConroller = MaskedTextController(mask: '00000-0000000-0');
+  //TextEditingController cnicConroller = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
@@ -133,7 +135,7 @@ class _HelperSignupState extends State<HelperSignup> {
     print('DP Uploaded CallBack');
   }
 
-  void verifyPhone() async {
+   void verifyPhone() async {
     if (_field.startsWith("Select")) {
       print("VerifyPHone :: select");
       DialogsHelpal.showMsgBox("Error", "Please select your field",
@@ -391,6 +393,139 @@ class _HelperSignupState extends State<HelperSignup> {
     );
   }
 
+  getCnicInputField(
+      TextEditingController textController,
+      IconData icon,
+      bool isCnic,
+      autofocus,
+      hintText,
+      TextInputType keyboardType,
+      Function onChanged(String value)) {
+    TextStyle titleStyle = new TextStyle(fontSize: 20, color: Colors.grey[600]);
+    //button structer
+    return Container(
+      height: 50,
+      decoration: btnDecoration(),
+      child: ListTile(
+        title: Transform.translate(
+          offset: Offset(-15, -2.5),
+          child: TextField(
+            onChanged: onChanged,
+            style: titleStyle,
+            controller: textController,
+            keyboardType: keyboardType,
+
+            inputFormatters: isCnic
+            ? [
+            LengthLimitingTextInputFormatter(15),
+            FilteringTextInputFormatter.digitsOnly
+            ]
+            : [],
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: hintText,
+              hintStyle: TextStyle(
+                fontStyle: FontStyle.normal,
+                color: Appdetails.grey4,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+        leading: Transform.translate(
+          offset: Offset(-10, -2.5),
+          child: Container(
+            padding: EdgeInsets.only(right: 6),
+            height: 50,
+            width: 45,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  width: 1,
+                  color: Appdetails.grey2,
+                ),
+              ),
+            ),
+            child: Icon(
+              icon,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  getNameInputField(
+      TextEditingController textController,
+      IconData icon,
+      bool isPhone,
+      hintText,
+      TextInputType keyboardType,
+      Function onChanged(String value)) {
+    TextStyle titleStyle = new TextStyle(fontSize: 20, color: Colors.grey[600]);
+    //button structer
+    return Container(
+      height: 50,
+      decoration: btnDecoration(),
+      child: ListTile(
+        title: Transform.translate(
+          offset: Offset(-15, -2.5),
+          child: TextField(
+            onChanged: onChanged,
+            style: titleStyle,
+            textCapitalization: TextCapitalization.sentences,
+            controller: textController,
+            keyboardType: keyboardType,
+            inputFormatters: isPhone
+            ? [
+              LengthLimitingTextInputFormatter(10),
+              FilteringTextInputFormatter.digitsOnly
+            ]
+            : [],
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: hintText,
+              hintStyle: TextStyle(
+                fontStyle: FontStyle.normal,
+                color: Appdetails.grey4,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+        leading: Transform.translate(
+          offset: Offset(-10, -2.5),
+          child: Container(
+            padding: EdgeInsets.only(right: 6),
+            height: 50,
+            width: 45,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  width: 1,
+                  color: Appdetails.grey2,
+                ),
+              ),
+            ),
+            child: isPhone
+                ? Text(
+              "+92",
+              style: titleStyle,
+            )
+                : Icon(
+              icon,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     //Screen size
@@ -403,7 +538,7 @@ class _HelperSignupState extends State<HelperSignup> {
     Color ovrly = Color.fromARGB(100, 0, 0, 0);
     myContext = context;
     return WillPopScope(
-        onWillPop: () => Appdetails.loadScreen(context, WelcomeScreen()),
+       // onWillPop: () => Appdetails.loadScreen(context, WelcomeScreen()),
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -478,10 +613,14 @@ class _HelperSignupState extends State<HelperSignup> {
                                     ),
                                     child: DropdownButton<String>(
                                       value: _field,
-                                      icon: Icon(Icons.arrow_forward_ios),
+                                      icon: Icon(Icons.keyboard_arrow_down_outlined),
                                       iconSize: 16,
                                       elevation: 5,
                                       isExpanded: true,
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.black87,
+                                      ),
                                       style: TextStyle(
                                           color: Colors.grey[600],
                                           fontSize: 18),
@@ -490,8 +629,8 @@ class _HelperSignupState extends State<HelperSignup> {
                                           _field = newValue;
                                         });
                                       },
+                                      hint: Text("Select Your Feild"),
                                       items: <String>[
-                                        'Select Your Field',
                                         'Plumber',
                                         'Electrician',
                                         'Delivery Service',
@@ -517,7 +656,7 @@ class _HelperSignupState extends State<HelperSignup> {
                                 _avatar(size.height),
                               ],
                             ),
-                            getInputField(
+                            getNameInputField(
                                 fullnameConroller,
                                 Icons.person,
                                 false,
@@ -529,8 +668,8 @@ class _HelperSignupState extends State<HelperSignup> {
                               print(value);
                               return;
                             }),
-                            getInputField(cnicConroller, Icons.credit_card,
-                                false, "CNIC", TextInputType.number, (value) {
+                            getCnicInputField(cnicConroller, Icons.credit_card,
+                                true,true, "CNIC", TextInputType.number, (value) {
                               //change full name
                               print(value);
                               _cnic = value;
@@ -553,7 +692,9 @@ class _HelperSignupState extends State<HelperSignup> {
                                 "Mobile Number", TextInputType.phone, (value) {
                               //change full name
                               print(value);
+                              setState(() {
 
+                              });
                               return;
                             }),
                           ],

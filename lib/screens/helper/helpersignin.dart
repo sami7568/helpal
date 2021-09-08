@@ -103,9 +103,8 @@ class _HelperSigninState extends State<HelperSignin> {
     Color ovrly = Color.fromARGB(100, 0, 0, 0);
 
     return WillPopScope(
-      onWillPop: () => Appdetails.loadScreen(context, WelcomeScreen()),
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
+     // onWillPop: () => Appdetails.loadScreen(context, WelcomeScreen()),
+      child: Scaffold(       extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -273,14 +272,15 @@ class _HelperSigninState extends State<HelperSignin> {
         await AuthService().saveLocalString(
             Appdetails.accountTypeKey, Appdetails.accountTypeValue_helper);
         Navigator.pop(mycontext);
-        //Pushing otp screen to display for entering the code manually
+        //Pushing otp screen to display dashboard
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => HelperOtpScreen(),
+            builder: (context) => HelperDash(),
           ),
         );
-      } else {
+      }
+      else {
         final myField = await AuthService()
             .getDocuementField("helpers", formatedPhone(), 'field');
         OurServices _field = OurServices.Plumbers;
@@ -320,10 +320,11 @@ class _HelperSigninState extends State<HelperSignin> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HelpeeSignup(),
+          builder: (context) => HelperSignup(),
         ),
       );
-    } else {
+    }
+    else {
       DialogsHelpal.showMsgBoxCallback(
         "Error",
         isExist + "\nPlease Contect Providers",

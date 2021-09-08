@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/screens/others/contactus.dart';
@@ -7,6 +6,10 @@ import 'package:helpalapp/functions/appdetails.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
 import 'package:helpalapp/screens/others/welcome.dart';
 import 'package:helpalapp/widgets/displaypicture.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 
 class HelpeeDrawer extends StatefulWidget {
   @override
@@ -98,6 +101,8 @@ class _HelpeeDrawerState extends State<HelpeeDrawer> {
                                       ),
                                       onTap: () {
                                         //onpressed
+                                        var re =requestMethod();
+
                                         print('See Your Profile');
                                       },
                                     ),
@@ -281,5 +286,49 @@ class _HelpeeDrawerState extends State<HelpeeDrawer> {
         ),
       ),
     );
+  }
+
+  Future<void> requestMethod() async {
+
+      String soap = '''<?xml version="1.0"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dto="http://dto.txn.part.pg.systems.com/" xmlns:dto1="http://dto.common.pg.systems.com/">
+	   	<soapenv:Header></soapenv:Header>
+		<soapenv:Body>
+		<dto:initiateTransactionRequestType>
+			<dto1:username>pg-systems</dto1:username>
+		    <dto1:password>d28df893f1c08c6a5ce0efa896c2943e</dto1:password>
+		    <orderId>111222</orderId>
+		    <storeId>641</storeId>
+		    <transactionAmount>5</transactionAmount>
+		    <transactionType>MA</transactionType>
+		    <msisdn>03457878789</msisdn>
+		    <mobileAccountNo>03457878789</mobileAccountNo>
+		    <emailAddress>a@a.com</emailAddress>
+		</dto:initiateTransactionRequestType>
+		</soapenv:Body>
+		</soapenv:Envelope>''';
+
+      http.Response response = await http.post(
+        'https://easypaystg.easypaisa.com.pk/easypay/PluginPageSource.jsf',
+        headers: {
+          'content-type': 'text/xmlc',
+          'authorization': 'bWVzdHJlOnRvdHZz',
+          'SOAPAction': 'http://www.totvs.com/IwsConsultaSQL/RealizarConsultaSQL',
+        },
+        body: utf8.encode(soap),
+      );
+
+      Fluttertoast.showToast(
+          msg: response.body,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+      print(response.statusCode);
+      return response.body;
+
   }
 }

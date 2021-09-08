@@ -59,11 +59,12 @@ class _HelperDashState extends State<HelperDash>
       }
     });
   }
+
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
     await Firebase.initializeApp();
-    print("Handling a background message: ${message.messageId}");
+    print('Handling a background message ${message.messageId}');
   }
 
   @override
@@ -77,6 +78,7 @@ class _HelperDashState extends State<HelperDash>
     //BgLoc.startLocationBackground();
     startLocationService();
     notificationsettings();
+    registerEventsForFCM();
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
 
@@ -244,6 +246,7 @@ class _HelperDashState extends State<HelperDash>
     return welcome + " $_name!";
   }
 
+
   @override
   Widget build(BuildContext context) {
     mycontext = context;
@@ -264,7 +267,7 @@ class _HelperDashState extends State<HelperDash>
       );
     } else {
       return WillPopScope(
-        onWillPop: _onBackPressed,
+        //onWillPop: _onBackPressed,
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(

@@ -133,20 +133,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HelpeeSignup(phoneNumber: "+923015817165"),
+          builder: (context) => HelpeePhonSignin(),
         ),
       );
     }
   }
 
   continueWithFacebook() async{
-    final result = await AuthService().signInWithGoogle(context);
+    final result = await AuthService().signInWithFacebook();
     print("result of login $result");
     if (result == true) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HelpeeDashboard(),
+          builder: (context) => HelpeePhonSignin(),
         ),
       );
     }
@@ -164,12 +164,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         transitionDuration: Duration(seconds: 0),
       ),
     );
-    //Appdetails.loadScreen(mycontext, HelperSignin());
+    Appdetails.loadScreen(mycontext, HelperSignin());
   }
 
   becomeHelperEmptyFunction() {
     becomeHelperPopups();
   }
+
 
   getButton(String btnTitle, Image btnIcon, Function callback) {
     //Style for title of button

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:ui';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:helpalapp/functions/helpalstreams.dart';
@@ -13,7 +15,10 @@ import 'package:helpalapp/widgets/ShadowText.dart';
 import 'package:helpalapp/widgets/gradbutton.dart';
 import 'package:helpalapp/functions/appdetails.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:http/http.dart' as http;
 
+String serverKey ="AAAAA3HPyac:APA91bHksmRKRhKDQMlnF07cCpQhsLDIorCk603EG_nR0vEbSh-xo4EHsEfkju87U7gh2Z2eOapDwmGswI_ClnYtbPMgaDJ2_QHju-fyQZ2fXg25NXqLZctdAeWgzPCFh-xDdNlY9bfj";
+String herlpeeLocation;
 class NewOrder extends StatefulWidget {
   final String workerName;
   final String workerPhone;
@@ -70,6 +75,7 @@ class _NewOrderState extends State<NewOrder>
   }
 
   void submitOrder() async {
+
     DialogsHelpal.showLoadingDialog(myContext, false);
 
     if (_duration.inSeconds > 0) {
@@ -97,6 +103,10 @@ class _NewOrderState extends State<NewOrder>
     dynamic helpeeName = myName;
     dynamic orderdate = _date;
 
+      setState(() {
+        herlpeeLocation =location;
+      });
+
     dynamic result = await HelpeeOrdersUpdate().sendNewOrder(
       message,
       contactNumber,
@@ -113,6 +123,9 @@ class _NewOrderState extends State<NewOrder>
     );
     Navigator.pop(myContext);
     if (result == true) {
+      //notify helper (push notification)
+
+     // sendNotificationToHelper(token, context, myId);
       //Loading bar
       DialogsHelpal.showMsgBoxCallback(
           "Success",
@@ -125,6 +138,40 @@ class _NewOrderState extends State<NewOrder>
       DialogsHelpal.showMsgBox(
           "Error", result, AlertType.error, myContext, Appdetails.appBlueColor);
     }
+  }
+
+  static sendNotificationToHelper(String token, context,String helpeeId) async{
+
+    Map<String, String> headerMap=
+        {
+          'Content-Type':'application/json',
+          'Authorization':serverKey,
+        };
+    Map notificationMap =
+        {
+          'body':'Helpee Location, ${herlpeeLocation}',
+          'title':'New Order',
+
+        };
+    Map dataMap ={
+      'click_action':'FLUTTER_NOTIFICATION_CLICK',
+      'id':'1',
+      'status':'done',
+      'ride_request_id':helpeeId,
+    };
+    Map sendNotificationMap ={
+      "notification":notificationMap,
+      "data": dataMap,
+      "priority":"high",
+      "to":token,
+    };
+
+    var res = await http.post(
+      "https://fcm.googleapis.com/fcm/send",
+      headers: headerMap,
+      body: jsonEncode(sendNotificationMap),
+    );
+    print(res);
   }
 
   Widget getCommentArea() {

@@ -11,12 +11,16 @@ import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/functions/appdetails.dart';
 import 'package:helpalapp/functions/nearbyhelpers.dart';
 import 'package:helpalapp/functions/storagehandler.dart';
+import 'package:helpalapp/screens/helpee/helpeedashboard.dart';
 import 'package:helpalapp/screens/helpee/workermodel.dart';
 import 'package:helpalapp/screens/helpee/workermodelvehicle.dart';
+import 'package:helpalapp/screens/others/alertcustom.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
 import 'package:helpalapp/widgets/gradbutton.dart';
 import 'package:location/location.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+
 
 class SearchForHelper extends StatefulWidget {
   final String currentField;
@@ -311,6 +315,7 @@ class _SearchForHelperState extends State<SearchForHelper> {
     LatLng myLatLng = new LatLng(locData.latitude, locData.longitude);
     //Connecting to Realtime Database
     await ref.reference().child('onlineworkers').once().then((element) {
+
       //Making a map of online workers
       Map<dynamic, dynamic> onlineWorkers = element.value;
       //printing to console for online workers
@@ -345,6 +350,7 @@ class _SearchForHelperState extends State<SearchForHelper> {
 
           print("The current looking for is = " + currentField.toLowerCase());
           //Checking if user searched matched with any field
+
           if (workerField == currentField.toLowerCase()) {
             Marker marker = new Marker(
               icon: Appdetails.getCurrentMarkerIcon(workerField),
@@ -368,6 +374,28 @@ class _SearchForHelperState extends State<SearchForHelper> {
                 );
               }
             });
+          }
+          else{
+           /* AwesomeDialog(
+              context: context,
+              animType: AnimType.SCALE,
+              dialogType: DialogType.WARNING,
+              *//*body: Center(child: Text(
+                'Helpers is not Available in Your region! try again later',
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),),*//*
+              title: 'No Helpers',
+              desc:   'Helpers is not Available in Your region! try again later',
+              btnOkText: "OK",
+              btnOkOnPress: () {
+                //Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>HelpeeDashboard()));
+              },
+            )..show();*/
+            /*AlertAz(
+              title: "Not Found! \n Currently there are no Helpers Available",
+              context: context,
+            ).show();*/
           }
         }
       });

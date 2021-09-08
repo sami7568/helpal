@@ -10,6 +10,7 @@ import 'package:helpalapp/functions/appdetails.dart';
 import 'package:helpalapp/screens/helper/helperaccountsettings.dart';
 import 'package:helpalapp/screens/helper/helpernavbar.dart';
 import 'package:helpalapp/widgets/displaypicture.dart';
+import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperSettings extends StatefulWidget {
@@ -25,7 +26,7 @@ class _HelperSettingsState extends State<HelperSettings>
   bool keepmesignedin = false;
   String username = "Loading...";
   String phonenumber = "Loading...";
-
+  bool value=false;
   final AuthService _auth = AuthService();
 
   Future darkMode() async {
@@ -65,8 +66,8 @@ class _HelperSettingsState extends State<HelperSettings>
 
   @override
   Widget build(BuildContext context) {
-    //double screenHeight = (MediaQuery.of(context).size.height);
-    //double screenWidth = (MediaQuery.of(context).size.width);
+    double screenHeight = (MediaQuery.of(context).size.height);
+    double screenWidth = (MediaQuery.of(context).size.width);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -77,6 +78,7 @@ class _HelperSettingsState extends State<HelperSettings>
       appBar: getAppbar(),
       bottomNavigationBar: HelperBottomNavbar().getnewnavbar(context, 2),
       body: Container(
+
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
@@ -86,18 +88,88 @@ class _HelperSettingsState extends State<HelperSettings>
             /* getProfileHeader(),
             SizedBox(
               height: 20,
-            ),
+            ),*/
             Divider(
               thickness: 1,
               color: Colors.grey[200],
-            ), */
+            ),
             Expanded(
-              child: Container(
-                child: _myListView(
-                  new ListView(
-                    children: getListItem(),
+
+              /*child:  SettingsList(
+                backgroundColor:Colors.white,
+                darkBackgroundColor: Colors.black87,
+                sections: [
+                  SettingsSection(
+                    title: 'Common'.toUpperCase(),
+                    tiles: [
+                      SettingsTile(
+                        title: 'Language',
+                        subtitle: 'English',
+                        leading: Icon(Icons.language, color: Appdetails.appGreenColor,
+                          size: 35,),
+                        onPressed: (BuildContext context) {},
+                      ),
+                    ],
                   ),
-                ),
+                  SettingsSection(
+                    title: 'Account',
+                    tiles: [
+                      SettingsTile(title: 'Account Settings',subtitle: 'Change details',
+                        leading: Icon(Icons.supervisor_account, color: Appdetails.appGreenColor,
+                        size: 35,),
+                      onPressed: (BuildContext context){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HelpeeSettingsAccount()));
+                      },),
+                      SettingsTile.switchTile(
+                        title: 'Use fingerprint',
+                        leading: Icon(Icons.fingerprint, color: Appdetails.appGreenColor,
+                          size: 35,),
+                        switchValue: value,
+                        onToggle: (bool value) {
+                          setState(() {
+                            value = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    title: 'Misc',
+                    tiles: [
+                      SettingsTile(title: 'Terms And Conditions',subtitle: 'Read how to use Helpal',
+                        leading: Icon(Icons.help_outline, color: Appdetails.appGreenColor,
+                          size: 35,),
+                        onPressed: (BuildContext context){
+
+                        },),
+                    ],
+                  ),
+                  SettingsSection(
+                    title: 'User',
+                    tiles: [
+                      SettingsTile(title: 'Log Out',subtitle: '',
+                        leading: Icon(Icons.exit_to_app, color: Appdetails.appGreenColor,
+                          size: 35,),
+                        onPressed: (BuildContext context){
+                          //signOut();
+                        },),
+                    ],
+                  ),
+                ],
+              ),*/
+
+              child: Container(
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: _myListView(
+                    new ListView(
+                      children: getListItem(),
+                    ),
+                  ),
+                ) ,
               ),
             ),
           ],
@@ -108,6 +180,7 @@ class _HelperSettingsState extends State<HelperSettings>
 
   getAppbar() {
     return AppBar(
+      title: Text("Settings"),
       leading: IconButton(
         icon: Icon(
           Icons.menu,
@@ -163,6 +236,7 @@ class _HelperSettingsState extends State<HelperSettings>
       'empty4': Icons.arrow_right,
       'Logout': Icons.exit_to_app,
     };
+
     Map<String, IconData> listSubitem = {
       'Change details': Icons.supervisor_account,
       'empty1': Icons.arrow_right,
@@ -175,6 +249,7 @@ class _HelperSettingsState extends State<HelperSettings>
       'empty4': Icons.arrow_right,
       '': Icons.exit_to_app,
     };
+
     List<Widget> listofwidgets = new List();
     int index = 0;
     listitem.forEach((key, value) {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -10,12 +11,15 @@ import 'package:helpalapp/screens/helpee/helpeesignin.dart';
 import 'package:helpalapp/screens/helpee/helpeesignup.dart';
 import 'package:helpalapp/screens/helper/helpersignin.dart';
 import 'package:helpalapp/screens/helper/helpersignup.dart';
+import 'package:helpalapp/screens/others/dialogs.dart';
 import 'package:helpalapp/screens/others/welcome.dart';
 import 'package:helpalapp/widgets/ShadowText.dart';
 import 'package:helpalapp/widgets/gradbutton.dart';
+import 'package:http/http.dart';
 import 'package:overlay_container/overlay_container.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 class HelpeePhonSignin extends StatefulWidget {
   @override
@@ -76,7 +80,6 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
     );
     return image;
   }
-
   //continue function here login with phone here
   continueWithPhone() {
     if (numberController.text.length < 10) {
@@ -97,6 +100,7 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
             ),
           ]).show();
     } else {
+
       _auth.loginUserWithPhone(numberController.text.trim(), context,
           phonAutoVerified, phonOtpScreen);
     }
@@ -107,12 +111,42 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
     await AuthService().saveLocalString(
         Appdetails.accountTypeKey, Appdetails.accountTypeValue_helpee);
     await AuthService().saveDefaultLocalKeys(phone, "helpees");
-    Navigator.push(
+
+    //after auth checking if account exist in database
+    dynamic isExist =
+    await AuthService().ifDetailsExists('helpees', phone);
+    print("user is=$isExist");
+    //if exist
+    if (isExist == true) {
+      await AuthService().saveLocalString(Appdetails.signinKey, "true");
+      await AuthService().saveLocalString(
+          Appdetails.accountTypeKey, Appdetails.accountTypeValue_helpee);
+      Navigator.pop(context);
+      //Pushing otp screen to display for entering the code manually
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HelpeeDashboard(),
+        ),
+      );
+    }
+    //if not exist in database
+    else if (isExist == false) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HelpeeSignup(phoneNumber: phone),
+        ),
+      );
+    }
+
+   /* Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => HelpeeSignup(phoneNumber: phone,),
+        builder: (context) => HelpeeDashboard(),
       ),
-    );
+    );*/
   }
 
   phonOtpScreen(String phoneNumber) {
@@ -145,14 +179,14 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
   }
 
   signinAsHelper() {
-    Navigator.pushReplacement(
+   /* Navigator.pushReplacement(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => HelperSignin(),
         transitionDuration: Duration(seconds: 0),
       ),
-    );
-    //Appdetails.loadScreen(mycontext, HelperSignin());
+    );*/
+    Appdetails.loadScreen(mycontext, HelperSignin());
   }
 
   becomeHelperEmptyFunction() {
@@ -170,8 +204,7 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
         onPressed: () => callback(),
         child: ListTile(
           title: Transform.translate(
-            offset: Offset(-27, -2.5),
-            child: Text(
+            offset: Offset(-27, -2.5),            child: Text(
               btnTitle,
               style: titleStyle,
             ),
@@ -280,9 +313,10 @@ class _HelpeePhonSigninState extends State<HelpeePhonSignin> {
       ),
       width: 250,
       backgroundColor: Appdetails.appGreenColor,
-      onPressed: () {
+      onPressed: () async {
         if (numberController.text.length > 9) {
           continueWithPhone();
+
         } else {
           toast("Please provide a valid number", duration: Toast.LENGTH_SHORT);
         }
