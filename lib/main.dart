@@ -100,6 +100,17 @@ class _MyAppState extends State<MyApp> {
       if(message.notification!=null){
         print(message.notification.body);
         print(message.notification.title);
+        showNotification();
+        /*AlertAz(
+          title: (message.data).toString(),
+          context: context,
+        ).show();
+        if (message.notification != null) {
+          print('Message also contained a notification: ${message.notification}');
+          AlertAz(
+            title: (message.notification).toString(),
+            context: context,
+          ).show();*/
       }
     });
   }
@@ -134,6 +145,7 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
 
   showNotification() async {
     print("Notification Call Received");

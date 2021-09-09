@@ -7,14 +7,17 @@ import 'dart:async';
 class PushNotificationService{
  final FirebaseMessaging fcm= FirebaseMessaging.instance;
 
-  Future initialize(){
-
-    fcm.getToken();
-
-  }
+ Future<String> getToken() async
+ {
+   String token =await fcm.getToken();
+   print('this is token');
+   print(token);
+   return token;
+ }
 }
 
 
+/*
 class notification extends StatefulWidget {
   @override
   _notificationState createState() => _notificationState();
@@ -86,4 +89,4 @@ class _notificationState extends State<notification> {
       ),
     );
   }
-}
+}*/

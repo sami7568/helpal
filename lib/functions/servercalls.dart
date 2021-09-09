@@ -13,6 +13,7 @@ import 'package:helpalapp/functions/helpalstreams.dart';
 import 'package:helpalapp/functions/helper/helperorders.dart';
 import 'package:helpalapp/screens/helpee/helpeedashboard.dart';
 import 'package:helpalapp/screens/helpee/helpeeotpscreen.dart';
+import 'package:helpalapp/screens/helper/pushNotificationService.dart';
 import 'package:helpalapp/screens/others/alertcustom.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
 import 'package:hive/hive.dart';
@@ -960,5 +961,17 @@ class AuthService {
     dynamic result = await updateDocumentField(
         collection, phone, accountType, accountNumber);
     return result;
+  }
+
+  Future<String> getToken(String phone)async{
+    final snapShot = await FirebaseFirestore.instance
+        .collection('helpers')
+        .doc(phone)
+        .get();
+    String token = snapShot.toString();
+    if(token!=null){
+      return token;
+    }
+    else return null;
   }
 }

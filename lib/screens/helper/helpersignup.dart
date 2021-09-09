@@ -10,6 +10,7 @@ import 'package:helpalapp/screens/helpee/helpeephonsignin.dart';
 import 'package:helpalapp/screens/helper/helperotpscreen.dart';
 import 'package:helpalapp/screens/helper/helpersignin.dart';
 import 'package:helpalapp/screens/helper/helpersignupdetails.dart';
+import 'package:helpalapp/screens/helper/pushNotificationService.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
 import 'package:helpalapp/screens/others/welcome.dart';
 import 'package:helpalapp/widgets/ShadowText.dart';
@@ -223,6 +224,10 @@ class _HelperSignupState extends State<HelperSignup> {
   }
 
   Future signup() async {
+    //get token and save into db
+    PushNotificationService notificationService = PushNotificationService();
+    String token = notificationService.getToken().toString();
+
     //Showing waiting dialog
     DialogsHelpal.showLoadingDialog(myContext, false);
     //Creating Map Details
@@ -254,6 +259,7 @@ class _HelperSignupState extends State<HelperSignup> {
       'status': 'offline',
       'myid': myid,
       "approved": "false",
+      "token":token,
     };
     //getting result for firestore user creation
     dynamic result =

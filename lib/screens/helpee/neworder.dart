@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:helpalapp/functions/helpalstreams.dart';
 import 'package:helpalapp/functions/helpee/helpeeorders.dart';
+import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/functions/storagehandler.dart';
 import 'package:helpalapp/screens/helpee/helpeedashboard.dart';
 import 'package:helpalapp/screens/helpee/locationpickfield.dart';
@@ -125,7 +126,10 @@ class _NewOrderState extends State<NewOrder>
     if (result == true) {
       //notify helper (push notification)
 
-     // sendNotificationToHelper(token, context, myId);
+      AuthService authService = AuthService();
+      String token =authService.getToken(helperphone).toString();
+
+      sendNotificationToHelper(token, context, myId);
       //Loading bar
       DialogsHelpal.showMsgBoxCallback(
           "Success",
@@ -157,7 +161,7 @@ class _NewOrderState extends State<NewOrder>
       'click_action':'FLUTTER_NOTIFICATION_CLICK',
       'id':'1',
       'status':'done',
-      'ride_request_id':helpeeId,
+      'order_id':helpeeId,
     };
     Map sendNotificationMap ={
       "notification":notificationMap,
