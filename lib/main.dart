@@ -135,7 +135,7 @@ class _MyAppState extends State<MyApp> {
     //when user tap on the notification
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       if(message.data!=null){
-        final routeFromMesssage = message.data["route"];
+        final routeFromMesssage = message.data;
         Navigator.push(
           context,
           MaterialPageRoute(
