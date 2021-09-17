@@ -259,8 +259,8 @@ class _NewOrderTailorsState extends State<NewOrderTailors>
       'Authorization':fcmServerKey,
     };
     Map notificationMap = {
-      'body':'',
-      'title':'',
+      'body':'You have recieved an order from $helper_id',
+      'title':'New Order',
     };
     Map dataMap ={
       'click_action':'FLUTTER_NOTIFICAITON_CLICK',
@@ -272,13 +272,14 @@ class _NewOrderTailorsState extends State<NewOrderTailors>
       "notification":notificationMap,
       "data":dataMap,
       "priority":"high",
-      "to":fcmServerKey,
+      "to":token,
     };
     var res =await http.post(
       'https://fcm.googleapis.com/fcm/send',
       headers: headerMap,
       body: jsonEncode(sendNotificationMap),
     );
+    print(res);
 
   }
 

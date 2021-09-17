@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:helpalapp/functions/helpalstreams.dart';
 import 'package:helpalapp/functions/servercalls.dart';
 import 'package:helpalapp/functions/storagehandler.dart';
 import 'package:helpalapp/screens/helpee/helpeephonsignin.dart';
@@ -18,6 +20,7 @@ import 'package:helpalapp/widgets/gradbutton.dart';
 import 'package:helpalapp/functions/appdetails.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperSignup extends StatefulWidget {
   @override
@@ -222,11 +225,24 @@ class _HelperSignupState extends State<HelperSignup> {
     fp = "+92" + fp;
     return fp;
   }
+  String token;
+  @override
+  void initState() {
+   getToken();
+    super.initState();
+  }
+  Future getToken()async{
+//    token=HelpalStreams.prefs.getString(Appdetails.fcmtoken);
+    setState(() async{
+       await FirebaseMessaging.instance.getToken(vapidKey: fcmtoken).then((value) =>
+         token = value,
+      );
+    });
+
+    print("Your FCM token is : $token");
+  }
 
   Future signup() async {
-    //get token and save into db
-    PushNotificationService notificationService = PushNotificationService();
-    String token = notificationService.getToken().toString();
 
     //Showing waiting dialog
     DialogsHelpal.showLoadingDialog(myContext, false);
@@ -247,6 +263,7 @@ class _HelperSignupState extends State<HelperSignup> {
           _image.path, dpUploaded, UploadTypes.DisplayPicture);
       print("dp upload await complete");
     }
+
     //Making map of user's details
     Map<String, dynamic> _details = {
       'field': _field.replaceAll(" ", "").toLowerCase(),
@@ -259,7 +276,7 @@ class _HelperSignupState extends State<HelperSignup> {
       'status': 'offline',
       'myid': myid,
       "approved": "false",
-      "token":token,
+      "token":token
     };
     //getting result for firestore user creation
     dynamic result =

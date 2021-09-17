@@ -97,18 +97,6 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
     0,
   ]);
   @override
-  void initState() {
-    super.initState();
-  }
-  String token;
-  void firebaseToken(){
-    FirebaseMessaging fcm = FirebaseMessaging.instance;
-    token = fcm.getToken().toString();
-    //save it to the helpers data
-
-  }
-
-  @override
   void dispose() {
     super.dispose();
   }
@@ -864,23 +852,23 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
       'Other'
     ];
     //maker
-    //var f1 = getVehicleMakerField(makers);
-    var f1 = new CusTextField(
+    var f1 = getVehicleMakerField(makers);
+    /*var f1 = new CusTextField(
       hint: "Bike Maker(Honda)",
       capitalization: TextCapitalization.characters,
       icon: Icon(Icons.directions_bike_outlined),
       validator: (val)=>val.isEmpty?"Please Provide Bike Maker":null,
       onChanged: (val) => setState(() => _vehiclemaker = val),
-    );
+    );*/
     //model
-    //var f2 = getVehicleModelsField();
-    var f2 = new CusTextField(
+    var f2 = getVehicleModelsField();
+    /*var f2 = new CusTextField(
       hint: "Bike Modle(2020)",
       capitalization: TextCapitalization.characters,
       icon: Icon(Icons.calendar_today),
       validator: (val)=>val.isEmpty?"Please Provide Bike Modle":null,
       onChanged: (val) => setState(() => _vehiclemodel = val),
-    );
+    );*/
     //number
     var f3 = new CusTextField(
       hint: 'Bike Number (RLC-110)',
@@ -900,7 +888,7 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
       else
         setState(() => _vehiclemakerColor = Appdetails.appGreenColor);
       //checking Vehicle model
-      if (_vehiclemodel.startsWith("Select"))
+      if (_vehiclemodel.startsWith(" Select"))
         setState(() => _vehiclemodelColor = Colors.red);
       else
         setState(() => _vehiclemodelColor = Appdetails.appGreenColor);
@@ -921,7 +909,6 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
             Appdetails.appGreenColor);
         return;
       }
-
       if (_formKey.currentState.validate()) {
         signupBike();
       }
@@ -970,21 +957,21 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
       'Other'
     ];
     //maker
-    //var f1 = getVehicleMakerField(makers);
-    var f1 = new CusTextField(
+    var f1 = getVehicleMakerField(makers);
+    /*var f1 = new CusTextField(
       hint: 'Car Maker (Honda)',
       icon: Icon(Icons.confirmation_number),
       validator: (val) => val.isEmpty ? 'Please Provide Car Maker' : null,
       onChanged: (val) => setState(() => _vehiclemaker = val),
-    );
+    );*/
     //model
-    //var f2 = getVehicleModelsField();
-    var f2 = new CusTextField(
+    var f2 = getVehicleModelsField();
+    /*var f2 = new CusTextField(
       hint: 'Car Model (2020)',
       icon: Icon(Icons.confirmation_number),
       validator: (val) => val.isEmpty ? 'Please Provide Car Model' : null,
       onChanged: (val) => setState(() => _vehiclenumber = val),
-    );
+    );*/
     //number
     var f3 = new CusTextField(
       hint: 'Car Number (RLC-110)',
@@ -1615,7 +1602,7 @@ class _HelperSignupDetailsState extends State<HelperSignupDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Scanned Copy of License Font & Back",
+          Text("Scanned Copy of License Front & Back",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.normal)),
           SizedBox(height: 10),
           Row(

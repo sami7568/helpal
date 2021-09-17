@@ -1,19 +1,12 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:notifications/notifications.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+String fcmtoken="fcmTokenValue";
 class PushNotificationService{
- final FirebaseMessaging fcm= FirebaseMessaging.instance;
 
- Future<String> getToken() async
- {
-   String token =await fcm.getToken();
-   print('this is token');
-   print(token);
-   return token;
- }
 }
 
 

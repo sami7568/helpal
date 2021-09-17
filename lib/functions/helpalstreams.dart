@@ -18,9 +18,9 @@ class HelpalStreams {
   }
 
   Stream<String> getStatus() {
+
     String phone = prefs.getString(Appdetails.phoneKey);
     if (phone == "" || phone == null) return null;
-
     return fs
         .collection("helpers")
         .doc(phone)

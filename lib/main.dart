@@ -49,10 +49,12 @@ void main() async {
   Appdetails.setServicesIcons();
   bool result = await AuthService().requestIosPermissionFCM();
   if (result) {
-    fcm.getToken(vapidKey: fcmServerKey).then((value) {
+    fcm.getAPNSToken().then((value) {
       HelpalStreams.prefs.setString(Appdetails.fcmtoken, value);
+      print(value);
     });
   }
+
   if (sp) {
     //Getting is this app running first time.?
     String isFirstTime = HelpalStreams.prefs.getString(Appdetails.firstTimeKey);
@@ -66,7 +68,6 @@ void main() async {
         HelpalStreams.prefs.getString(Appdetails.firstTimeKey);
     //getting output in editor console
     print("Running App First Time =   $isFirstTime");
-
   }
 }
 
@@ -177,7 +178,6 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
 
   showNotification() async {
     print("Notification Call Received");

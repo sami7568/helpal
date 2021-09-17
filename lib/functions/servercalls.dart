@@ -11,13 +11,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:helpalapp/functions/appdetails.dart';
 import 'package:helpalapp/functions/helpalstreams.dart';
 import 'package:helpalapp/functions/helper/helperorders.dart';
-import 'package:helpalapp/screens/helpee/helpeedashboard.dart';
-import 'package:helpalapp/screens/helpee/helpeeotpscreen.dart';
-import 'package:helpalapp/screens/helper/pushNotificationService.dart';
+import 'package:helpalapp/main.dart';
 import 'package:helpalapp/screens/others/alertcustom.dart';
 import 'package:helpalapp/screens/others/dialogs.dart';
 import 'package:hive/hive.dart';
-import 'package:http/http.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 /*
@@ -605,7 +602,7 @@ class AuthService {
   //////////////////////////////////////////
   //Create new user with given data
   //////////////////////////////////////////
-  Future createRecord(
+  Future  createRecord(
       String accountType, String phone, Map<String, dynamic> userdata) async {
     try {
       await firestoreRef.collection(accountType).doc(phone).set(userdata);
@@ -614,6 +611,7 @@ class AuthService {
       return e.toString();
     }
   }
+
   //////////////////////////////////////////
   //Getting saved addresses
   //////////////////////////////////////////
@@ -963,15 +961,12 @@ class AuthService {
     return result;
   }
 
-  Future<String> getToken(String phone)async{
-    final snapShot = await FirebaseFirestore.instance
-        .collection('helpers')
+  Future<Stream<String>> getToken(String phone)async{
+    final fs = await FirebaseFirestore.instance;
+    return fs
+        .collection("helpers")
         .doc(phone)
-        .get();
-    String token = snapShot.toString();
-    if(token!=null){
-      return token;
-    }
-    else return null;
+        .snapshots()
+        .map((event) => event.data()['token'].toString());
   }
 }

@@ -127,9 +127,9 @@ class _NewOrderState extends State<NewOrder>
       //notify helper (push notification)
 
       AuthService authService = AuthService();
-      String token =authService.getToken(helperphone).toString();
-
-      sendNotificationToHelper(token, context, myId);
+      Future<Stream<String>> token =authService.getToken(helperphone);
+        //push notification sent
+      sendNotificationToHelper(token.toString(), context, myId);
       //Loading bar
       DialogsHelpal.showMsgBoxCallback(
           "Success",
