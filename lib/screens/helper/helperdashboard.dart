@@ -150,7 +150,6 @@ class _HelperDashState extends State<HelperDash>
       }
     });
     if (approved == "false") return;
-
     if (!_status) {
       DialogsHelpal.showMsgBox(
           "Warning!",
@@ -245,8 +244,6 @@ class _HelperDashState extends State<HelperDash>
 
     return welcome + " $_name!";
   }
-
-
   @override
   Widget build(BuildContext context) {
     mycontext = context;

@@ -236,7 +236,6 @@ class _HelperSignupState extends State<HelperSignup> {
     setState(() async{
        await FirebaseMessaging.instance.getToken(vapidKey: fcmtoken).then((value) =>
          token = value,
-         
       );
     });
 

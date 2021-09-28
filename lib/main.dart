@@ -20,7 +20,7 @@ import 'screens/helper/orderpage.dart';
 
 var showSplash = false;
 String fcmServerKey =
-    "AAAAA3HPyac:APA91bHksmRKRhKDQMlnF07cCpQhsLDIorCk603EG_nR0vEbSh-xo4EHsEfkju87U7gh2Z2eOapDwmGswI_ClnYtbPMgaDJ2_QHju-fyQZ2fXg25NXqLZctdAeWgzPCFh-xDdNlY9bfj";
+    "key=AAAAA3HPyac:APA91bHksmRKRhKDQMlnF07cCpQhsLDIorCk603EG_nR0vEbSh-xo4EHsEfkju87U7gh2Z2eOapDwmGswI_ClnYtbPMgaDJ2_QHju-fyQZ2fXg25NXqLZctdAeWgzPCFh-xDdNlY9bfj";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
